@@ -1537,9 +1537,12 @@ MonoBehaviour:
   width: 50
   depth: 50
   water: 5
-  waterHeight: 10
+  totalHeight: 40
   maxHeight: 16
-  noiseScale: 20
+  floorMaxHeight: 30
+  minCaveHeight: 20
+  waterLevel: 5
+  noiseScale: 70
 --- !u!4 &1294357185
 Transform:
   m_ObjectHideFlags: 0
