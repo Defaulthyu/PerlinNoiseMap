@@ -12,47 +12,79 @@ public class NoiseVoxleMap : MonoBehaviour
     public int width = 20;
     public int depth = 20;
     public int water = 20;
-    public int waterHeight = 10;
+    public int totalHeight = 40;
     public int maxHeight = 16;
+    [Header("Cave Settings")]
+    public int floorMaxHeight = 10;  // 바닥의 최대 높이
+    public int minCaveHeight = 5;    // 동굴의 최소 높이 (바닥과 천장 사이 간격)
+    public int waterLevel = 5;       // 수면 높이
+
     [SerializeField] float noiseScale = 20f;
 
     private void Start()
     {
-        float offsetX = Random.Range(-9999f, 9999f);
-        float offsetZ = Random.Range(-9999f, 9999f);
-        Debug.Log(offsetX + " " + offsetZ);
+        GenerateCave();
+    }
+
+    private void GenerateCave()
+    {
+        // 바닥용 노이즈 오프셋
+        float floorOffsetX = Random.Range(-9999f, 9999f);
+        float floorOffsetZ = Random.Range(-9999f, 9999f);
+
+        // 천장용 노이즈 오프셋 (바닥과 모양이 달라야 하므로 별도 생성)
+        float ceilingOffsetX = Random.Range(-9999f, 9999f);
+        float ceilingOffsetZ = Random.Range(-9999f, 9999f);
 
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < depth; z++)
             {
-                float nx = (x + offsetX) / noiseScale;
-                float nz = (z + offsetZ) / noiseScale;
+                // 1. 바닥 높이 계산 (기존 로직)
+                float nx = (x + floorOffsetX) / noiseScale;
+                float nz = (z + floorOffsetZ) / noiseScale;
+                float floorNoise = Mathf.PerlinNoise(nx, nz);
+                int floorY = Mathf.FloorToInt(floorNoise * floorMaxHeight);
+                if (floorY <= 0) floorY = 1;
 
-                float noise = Mathf.PerlinNoise(nx, nz);
+                // 2. 천장 시작 높이 계산
+                // 바닥 높이 + 최소 동굴 높이 + (노이즈 * 추가 높이)
+                float cnx = (x + ceilingOffsetX) / noiseScale;
+                float cnz = (z + ceilingOffsetZ) / noiseScale;
+                float ceilingNoise = Mathf.PerlinNoise(cnx, cnz);
 
-                int h = Mathf.FloorToInt(noise * maxHeight);
+                // 천장은 바닥보다 무조건 minCaveHeight만큼 위에 있어야 함
+                int ceilingY = floorY + minCaveHeight + Mathf.FloorToInt(ceilingNoise * 5);
 
-                if (h <= 0)
-                    h = 1;
-
-                for (int y = 0; y <= h; y++)
+                // 3. Y축 루프: 바닥부터 전체 높이까지
+                for (int y = 0; y < totalHeight; y++)
                 {
-                    if (y == h)
+                    // A. 바닥 생성 구역
+                    if (y <= floorY)
                     {
-                        GrassPlace(x, y, z);
+                        if (y == floorY && y >= waterLevel) // 물 위라면 잔디
+                        {
+                            GrassPlace(x, y, z);
+                        }
+                        else
+                        {
+                            DirtPlace(x, y, z);
+                        }
                     }
-                    else
+                    // B. 물 생성 구역 (바닥보다 위, 수면보다 아래, 천장보다 아래)
+                    else if (y > floorY && y < waterLevel && y < ceilingY)
+                    {
+                        WaterPlace(x, y, z);
+                    }
+                    // C. 천장 생성 구역 (천장 높이 이상)
+                    else if (y >= ceilingY)
                     {
                         DirtPlace(x, y, z);
                     }
+                    // D. 그 외(floorY < y < ceilingY)는 공기(빈 공간)
                 }
-                for (int y = h; y < water; y++)
-                    WaterPlace(x, y, z);
-
             }
         }
-        //Debug.Log((1 + offsetX) / noiseScale);
     }
     private void DirtPlace(int x, int y, int z)
     {
