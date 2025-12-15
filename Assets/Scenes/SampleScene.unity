@@ -675,7 +675,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 30.232, y: 23.52, z: 7.83}
+  m_LocalPosition: {x: -0.11040001, y: 22.484, z: -0.01599998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -877,6 +877,12 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &468202451 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6836613423066651239, guid: 9422f3e9ceb367e449590bc4e42a53af,
+    type: 3}
+  m_PrefabInstance: {fileID: 1157806777}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &498266254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,13 +1021,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.2
+  m_Height: 0.9
   m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.03, z: 0}
+  m_Center: {x: 0, y: 0.18, z: 0}
 --- !u!4 &561564943
 Transform:
   m_ObjectHideFlags: 0
@@ -1031,8 +1037,8 @@ Transform:
   m_GameObject: {fileID: 561564940}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 30.37, y: 22.29, z: 7.85}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 21.5, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1681165079}
@@ -1075,8 +1081,7 @@ MonoBehaviour:
   toolDamage: 1
   hitColldown: 0.15
   inventory: {fileID: 561564946}
-  selectedBlock: {fileID: 6836613423066651239, guid: 9422f3e9ceb367e449590bc4e42a53af,
-    type: 3}
+  selectedBlock: {fileID: 468202451}
 --- !u!114 &561564946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1499,6 +1504,74 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9422f3e9ceb367e449590bc4e42a53af, type: 3}
+--- !u!1001 &1178837866
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5452574200091383227, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_Name
+      value: Grass
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.524
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079384197698011230, guid: afeb2711c299565499469c2737b3c2b8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: afeb2711c299565499469c2737b3c2b8, type: 3}
 --- !u!1 &1294357183
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,6 +1582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1294357185}
   - component: {fileID: 1294357184}
+  - component: {fileID: 1294357186}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1523,7 +1597,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294357183}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42980401ee96aef4b878900458b0c295, type: 3}
   m_Name: 
@@ -1536,13 +1610,13 @@ MonoBehaviour:
     type: 3}
   width: 50
   depth: 50
-  water: 5
-  totalHeight: 40
-  maxHeight: 16
-  floorMaxHeight: 30
-  minCaveHeight: 20
+  totalHeight: 50
+  floorMaxHeight: 50
   waterLevel: 5
-  noiseScale: 70
+  caveMinGap: 10
+  generateCave: 1
+  noiseScale: 150
+  seedOffset: 10
 --- !u!4 &1294357185
 Transform:
   m_ObjectHideFlags: 0
@@ -1558,6 +1632,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1294357186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294357183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8284451c608394468d565d5509d5c33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1681165079}
+  autoSpawnPlayer: 1
+  blockPrefab: {fileID: 6508307054078664923, guid: fbb1b992ac0655249848bc6fbeac409b,
+    type: 3}
+  waterPrefab: {fileID: 8005593151611414581, guid: cd711b5794fe0e04f98c626edefef396,
+    type: 3}
+  grassPrefab: {fileID: 5452574200091383227, guid: afeb2711c299565499469c2737b3c2b8,
+    type: 3}
+  minerals:
+  - name: Coal
+    prefab: {fileID: 6508307054078664923, guid: fc9d5f0c46b26224e9473badae012c64,
+      type: 3}
+    type: 4
+    rarity: 0.2
+    minHeight: 0
+    maxHeight: 30
+  - name: Gold
+    prefab: {fileID: 6508307054078664923, guid: bd10c417536a7f946ae21d9edb4c7fcc,
+      type: 3}
+    type: 5
+    rarity: 0.05
+    minHeight: 0
+    maxHeight: 20
+  - name: Diamond
+    prefab: {fileID: 6508307054078664923, guid: fce343a34e1a6044a902192ed55a7b66,
+      type: 3}
+    type: 6
+    rarity: 0.01
+    minHeight: 0
+    maxHeight: 10
+  chunkSize: 8
+  renderDistance: 3
+  totalHeight: 30
+  floorMaxHeight: 16
+  waterLevel: 8
+  noiseScale: 20
+  seed: 0
 --- !u!1 &1342899395
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,3 +2054,4 @@ SceneRoots:
   - {fileID: 1294357185}
   - {fileID: 1014932639}
   - {fileID: 1156151177}
+  - {fileID: 1178837866}

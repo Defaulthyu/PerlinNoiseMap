@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum BlockType { Dirt, Grass, Water }
 public class Block : MonoBehaviour
 {
     [Header("블록 스탯")]
@@ -24,10 +23,15 @@ public class Block : MonoBehaviour
     {
         if (!mineable) return;
         hp -= damage;
+
         if (hp <= 0)
         {
             if (inven != null && dropCount > 0)
-                inven.Add(type, dropCount);
+            {
+                // ★ 핵심 수정: (int)로 숫자로 먼저 바꾼 뒤, (ItemType)으로 다시 바꿉니다.
+                // BlockType.Dirt(0) -> 숫자 0 -> ItemType.Dirt(0)
+                inven.Add((ItemType)type, dropCount);
+            }
             Destroy(gameObject);
         }
     }
