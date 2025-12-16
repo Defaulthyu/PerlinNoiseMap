@@ -10,7 +10,6 @@ public enum BlockType
     Water,
     Stone,
     Coal,
-    Iron,
     Gold,
     Diamond
 }
@@ -23,11 +22,9 @@ public enum ItemType
     Water,
     Stone,
     Coal,
-    Iron,
     Gold,
     Diamond,
 
     Pickaxe,
     Axe,
-    Sword
 }

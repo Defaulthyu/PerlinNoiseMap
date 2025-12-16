@@ -193,7 +193,7 @@ public class WorldGenerator : MonoBehaviour
             Block b = go.GetComponent<Block>();
             if (b != null)
             {
-                b.type = type;
+                b.type = (ItemType)type;
             }
         }
     }

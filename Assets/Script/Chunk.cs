@@ -84,7 +84,7 @@ public class Chunk : MonoBehaviour
 
                         // 블록 컴포넌트 설정 (프리팹에 있다면 생략 가능)
                         Block b = go.GetComponent<Block>();
-                        if (b != null) b.type = type;
+                        if (b != null) b.type =(ItemType)type;
                     }
                 }
             }

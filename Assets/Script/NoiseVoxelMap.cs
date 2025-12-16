@@ -2,120 +2,148 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoiseVoxleMap : MonoBehaviour
+public class NoiseVoxelMap : MonoBehaviour
 {
-    [Header("Prefabs (Must have Block Component)")]
-    public GameObject blockPrefab; // Block 스크립트가 붙어있어야 함
-    public GameObject waterPrefab;
+    [Header("Basic Blocks")]
     public GameObject grassPrefab;
+    public GameObject dirtPrefab;
+    public GameObject waterPrefab;
+    public GameObject stonePrefab; // 새로 추가: 돌
+
+    [Header("Ores")]
+    public GameObject coalPrefab;    // 석탄
+    public GameObject goldPrefab;    // 금
+    public GameObject diamondPrefab; // 다이아
 
     [Header("Map Settings")]
     public int width = 20;
     public int depth = 20;
-    public int totalHeight = 40;
-
-    [Header("Terrain Settings")]
-    public int floorMaxHeight = 16;  // 지표면 최대 높이
-    public int waterLevel = 8;       // 수면 높이
-
-    [Header("Cave Settings")]
-    public int caveMinGap = 4;       // 동굴 최소 높이
-    public bool generateCave = true; // 동굴 생성 여부 토글
-
-    [Header("Noise Settings")]
+    public int waterLevel = 5;       // 변수명 명확하게 변경 (water -> waterLevel)
+    public int maxHeight = 16;
     [SerializeField] float noiseScale = 20f;
-    [SerializeField] float seedOffset; // 매번 다른 맵을 위해
 
-    // 블록 데이터를 관리할 딕셔너리 (나중에 채굴/저장 기능을 위해 필요)
-    private Dictionary<Vector3Int, Block> blockData = new Dictionary<Vector3Int, Block>();
+    [Header("Ore Rarity (0.0 ~ 1.0)")]
+    public float coalChance = 0.08f;   // 8%
+    public float goldChance = 0.04f;   // 4%
+    public float diamondChance = 0.01f;// 1%
 
     private void Start()
     {
-        // 랜덤 시드 설정
-        seedOffset = Random.Range(-10000f, 10000f);
         GenerateMap();
     }
 
-    private void GenerateMap()
+    public void GenerateMap()
     {
-        blockData.Clear(); // 재생성 시 초기화
+        float offsetX = Random.Range(-9999f, 9999f);
+        float offsetZ = Random.Range(-9999f, 9999f);
 
-        // 루프 순서 최적화 (캐시 효율성)
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < depth; z++)
             {
-                // 1. 지표면(Floor) 높이 계산
-                float nx = (x + seedOffset) / noiseScale;
-                float nz = (z + seedOffset) / noiseScale;
+                // 1. 지형 높이 결정 (Height Map)
+                float nx = (x + offsetX) / noiseScale;
+                float nz = (z + offsetZ) / noiseScale;
+                float noise = Mathf.PerlinNoise(nx, nz);
+                int h = Mathf.FloorToInt(noise * maxHeight);
+                if (h <= 0) h = 1;
 
-                // PerlinNoise는 0~1 반환 -> 높이로 변환
-                int surfaceY = Mathf.FloorToInt(Mathf.PerlinNoise(nx, nz) * floorMaxHeight);
-                if (surfaceY < 1) surfaceY = 1; // 최소 바닥 1칸 보장
-
-                // 2. 동굴 천장(Ceiling) 높이 계산 (동굴이 지표면보다 위에 생기는 것 방지 로직 추가 가능)
-                int caveCeilingY = 0;
-                if (generateCave)
+                // 2. 바닥부터 높이 h까지 블록 쌓기
+                for (int y = 0; y <= h; y++)
                 {
-                    float cnx = (x + seedOffset + 500f) / noiseScale; // 오프셋을 다르게 줌
-                    float cnz = (z + seedOffset + 500f) / noiseScale;
-                    int noiseHeight = Mathf.FloorToInt(Mathf.PerlinNoise(cnx, cnz) * 10); // 천장 굴곡
-
-                    // 지표면 + 최소 공간 + 굴곡
-                    caveCeilingY = surfaceY + caveMinGap + noiseHeight;
-                }
-                else
-                {
-                    caveCeilingY = totalHeight + 10; // 동굴 안 만들거면 천장을 맵 밖으로
+                    DetermineBlockToPlace(x, y, z, h);
                 }
 
-                // 3. Y축 채우기
-                for (int y = 0; y < totalHeight; y++)
+                // 3. 물 채우기
+                for (int y = h + 1; y < waterLevel; y++)
                 {
-                    // A. 지표면 및 지하 (땅)
-                    if (y <= surfaceY)
-                    {
-                        if (y == surfaceY && y >= waterLevel)
-                        {
-                            CreateBlock(x, y, z, BlockType.Grass, grassPrefab);
-                        }
-                        else
-                        {
-                            CreateBlock(x, y, z, BlockType.Dirt, blockPrefab);
-                        }
-                    }
-                    // B. 물 (지표면보다 높고, 수면보다 낮고, 동굴 천장 아래일 때 - 동굴 침수 방지 로직 필요시 수정)
-                    else if (y > surfaceY && y < waterLevel && y < caveCeilingY)
-                    {
-                        CreateBlock(x, y, z, BlockType.Water, waterPrefab);
-                    }
-                    // C. 동굴 천장 위 (다시 흙)
-                    else if (y >= caveCeilingY)
-                    {
-                        CreateBlock(x, y, z, BlockType.Dirt, blockPrefab);
-                    }
+                    PlaceBlock(x, y, z, waterPrefab, ItemType.Water, false);
                 }
             }
         }
     }
 
-    private void CreateBlock(int x, int y, int z, BlockType type, GameObject prefab)
+    // 어떤 블록을 놓을지 결정하는 로직
+    void DetermineBlockToPlace(int x, int y, int z, int surfaceHeight)
     {
-        // 쿼터니언 idnetity는 캐싱된 값을 쓰는게 미세하게 빠름
+        // 1. 최상단: 잔디
+        if (y == surfaceHeight)
+        {
+            // 물 높이보다 낮으면 모래(혹은 흙)가 자연스럽지만 일단 잔디로 유지
+            if (y < waterLevel)
+                PlaceBlock(x, y, z, dirtPrefab, ItemType.Dirt, true); // 물 밑은 흙
+            else
+                PlaceBlock(x, y, z, grassPrefab, ItemType.Grass, true);
+            return;
+        }
+
+        // 2. 표면 바로 아래 (3칸 정도): 흙
+        if (y > surfaceHeight - 3)
+        {
+            PlaceBlock(x, y, z, dirtPrefab, ItemType.Dirt, true);
+            return;
+        }
+
+        // 3. 그 아래 깊은 곳: 돌 + 광물
+        // 확률적으로 광물 생성 (깊을수록 좋은 광물이 나오게 하려면 y값을 확률 계산에 넣으면 됨)
+        float randomVal = Random.value; // 0.0 ~ 1.0 랜덤
+
+        if (randomVal < diamondChance && y < 5) // 다이아는 아주 깊은 곳(y < 5)에서만
+        {
+            PlaceBlock(x, y, z, diamondPrefab, ItemType.Diamond, true);
+        }
+        else if (randomVal < goldChance && y < 10) // 금은 중간 깊이(y < 10)부터
+        {
+            PlaceBlock(x, y, z, goldPrefab, ItemType.Gold, true);
+        }
+        else if (randomVal < coalChance) // 석탄은 돌이 있는 곳이면 어디든
+        {
+            PlaceBlock(x, y, z, coalPrefab, ItemType.Coal, true);
+        }
+        else
+        {
+            // 꽝: 일반 돌
+            PlaceBlock(x, y, z, stonePrefab, ItemType.Stone, true);
+        }
+    }
+
+    // 블록 생성 통합 함수
+    private void PlaceBlock(int x, int y, int z, GameObject prefab, ItemType type, bool isMineable)
+    {
+        if (prefab == null) return;
+
         var go = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity, transform);
         go.name = $"{type}_{x}_{y}_{z}";
 
-        // GetComponent 대신, 프리팹에 이미 붙어있는 컴포넌트를 활용하거나
-        // 필요하다면 여기서 초기화. (프리팹에 Block 스크립트가 붙어있다고 가정)
-        Block b = go.GetComponent<Block>();
-        if (b != null)
-        {
-            b.type = type;
-            b.maxHP = 3;
-            b.mineable = (type != BlockType.Water);
+        // Block 컴포넌트 설정 (Block 스크립트가 있다고 가정)
+        var b = go.GetComponent<Block>() ?? go.AddComponent<Block>();
+        b.type = type;
+        b.maxHP = 3; // 광물 종류에 따라 체력을 다르게 줄 수도 있음 (switch문 활용)
+        b.dropCount = 1;
+        b.mineable = isMineable;
 
-            // 딕셔너리에 등록 (나중에 블록 찾을 때 유용)
-            blockData.Add(new Vector3Int(x, y, z), b);
+        // 광물별 체력 조정 예시
+        if (type == ItemType.Diamond) b.maxHP = 10;
+        else if (type == ItemType.Gold) b.maxHP = 5;
+        else if (type == ItemType.Stone) b.maxHP = 4;
+    }
+
+    // 플레이어가 블록을 설치할 때 호출하는 함수 (기존 유지)
+    public void PlaceTile(Vector3Int pos, ItemType type)
+    {
+        GameObject targetPrefab = null;
+        switch (type)
+        {
+            case ItemType.Dirt: targetPrefab = dirtPrefab; break;
+            case ItemType.Grass: targetPrefab = grassPrefab; break;
+            case ItemType.Water: targetPrefab = waterPrefab; break;
+            case ItemType.Stone: targetPrefab = stonePrefab; break;
+                // 필요한 경우 설치 가능한 다른 블록 추가
+        }
+
+        if (targetPrefab != null)
+        {
+            PlaceBlock(pos.x, pos.y, pos.z, targetPrefab, type, true);
         }
     }
 }

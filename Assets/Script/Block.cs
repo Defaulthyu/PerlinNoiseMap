@@ -6,7 +6,7 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     [Header("블록 스탯")]
-    public BlockType type = BlockType.Dirt;
+    public ItemType type = ItemType.Dirt;
     public int maxHP = 3;
     [HideInInspector] public int hp;
     public int dropCount = 1;
@@ -23,15 +23,10 @@ public class Block : MonoBehaviour
     {
         if (!mineable) return;
         hp -= damage;
-
         if (hp <= 0)
         {
             if (inven != null && dropCount > 0)
-            {
-                // ★ 핵심 수정: (int)로 숫자로 먼저 바꾼 뒤, (ItemType)으로 다시 바꿉니다.
-                // BlockType.Dirt(0) -> 숫자 0 -> ItemType.Dirt(0)
-                inven.Add((ItemType)type, dropCount);
-            }
+                inven.Add(type, dropCount);
             Destroy(gameObject);
         }
     }
