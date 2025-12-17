@@ -12,6 +12,7 @@ public class NoiseVoxelMap : MonoBehaviour
 
     [Header("Ores")]
     public GameObject coalPrefab;    // 석탄
+    public GameObject ironPrefab;
     public GameObject goldPrefab;    // 금
     public GameObject diamondPrefab; // 다이아
 
@@ -24,6 +25,7 @@ public class NoiseVoxelMap : MonoBehaviour
 
     [Header("Ore Rarity (0.0 ~ 1.0)")]
     public float coalChance = 0.08f;   // 8%
+    public float ironChance = 0.05f;   //5%
     public float goldChance = 0.04f;   // 4%
     public float diamondChance = 0.01f;// 1%
 
@@ -96,6 +98,10 @@ public class NoiseVoxelMap : MonoBehaviour
         {
             PlaceBlock(x, y, z, goldPrefab, ItemType.Gold, true);
         }
+        else if (randomVal < ironChance) // 철
+        {
+            PlaceBlock(x, y, z, ironPrefab, ItemType.Iron, true);
+        }
         else if (randomVal < coalChance) // 석탄은 돌이 있는 곳이면 어디든
         {
             PlaceBlock(x, y, z, coalPrefab, ItemType.Coal, true);
@@ -121,11 +127,6 @@ public class NoiseVoxelMap : MonoBehaviour
         b.maxHP = 3; // 광물 종류에 따라 체력을 다르게 줄 수도 있음 (switch문 활용)
         b.dropCount = 1;
         b.mineable = isMineable;
-
-        // 광물별 체력 조정 예시
-        if (type == ItemType.Diamond) b.maxHP = 10;
-        else if (type == ItemType.Gold) b.maxHP = 5;
-        else if (type == ItemType.Stone) b.maxHP = 4;
     }
 
     // 플레이어가 블록을 설치할 때 호출하는 함수 (기존 유지)
@@ -138,6 +139,7 @@ public class NoiseVoxelMap : MonoBehaviour
             case ItemType.Grass: targetPrefab = grassPrefab; break;
             case ItemType.Water: targetPrefab = waterPrefab; break;
             case ItemType.Stone: targetPrefab = stonePrefab; break;
+            case ItemType.Iron: targetPrefab = ironPrefab; break;
                 // 필요한 경우 설치 가능한 다른 블록 추가
         }
 

@@ -118,8 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96d6d2afca2d56544bd06d8ed9ec625b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  maxHP: 3
+  type: 7
+  maxHP: 15
   hp: 0
   dropCount: 1
   mineable: 1

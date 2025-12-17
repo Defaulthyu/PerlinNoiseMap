@@ -14,6 +14,7 @@ public class CraftingPanel : MonoBehaviour
     public Button craftButton;
     public Button clearButton;
     public TMP_Text hintText;
+    public ShopUI shopUI;
 
     readonly Dictionary<ItemType, int> planned = new();
 
@@ -47,7 +48,11 @@ public class CraftingPanel : MonoBehaviour
     {
         isOpen = open;
         if (root)
+        {
             root.SetActive(open);
+            shopUI.CloseShop();
+        }
+
         if (!open)
             ClearPlanned();
     }

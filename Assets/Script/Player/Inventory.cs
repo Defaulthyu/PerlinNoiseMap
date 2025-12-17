@@ -1,15 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Inventory : MonoBehaviour
 {
     public Dictionary<ItemType, int> items = new();
     InventoryUI inventoryUI;
+    public int gold = 0;
 
     private void Start()
     {
         inventoryUI = FindObjectOfType<InventoryUI>();
+    }
+    public void AddGold(int amount)
+    {
+        gold += amount;
+        if (inventoryUI != null) inventoryUI.UpdateGoldText(gold);
+        Debug.Log($"[Money] ÇöÀç °ñµå: {gold}");
+    }
+
+    public bool UseGold(int amount)
+    {
+        if (gold >= amount)
+        {
+            gold -= amount;
+            if (inventoryUI != null) inventoryUI.UpdateGoldText(gold);
+            return true;
+        }
+        return false;
     }
 
     public int GetCount(ItemType id)

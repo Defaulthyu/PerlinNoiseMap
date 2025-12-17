@@ -12,6 +12,8 @@ public class Block : MonoBehaviour
     public int dropCount = 1;
     public bool mineable = true;
 
+    public int minTier = 0;
+
     private void Awake()
     {
         hp = maxHP;

@@ -29,14 +29,6 @@ public class SlotItemPrefab : MonoBehaviour, IPointerClickHandler
 
     }
 
-    private void Start()
-    {
-        if (itemType == ItemType.Axe)
-        {
-            player.GetComponent<PlayerHarvester>().toolDamage = 2;
-        }
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Right) return;

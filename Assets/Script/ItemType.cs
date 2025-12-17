@@ -5,11 +5,13 @@ using UnityEngine;
 // 1. 블록 종류
 public enum BlockType
 {
+    None,
     Dirt,
     Grass,
     Water,
     Stone,
     Coal,
+    Iron,
     Gold,
     Diamond
 }
@@ -17,14 +19,18 @@ public enum BlockType
 // 2. 아이템 종류
 public enum ItemType
 {
+    None,
     Dirt,
     Grass,
     Water,
     Stone,
     Coal,
+    Iron,
     Gold,
     Diamond,
 
-    Pickaxe,
-    Axe,
+    StonePickaxe,
+    IronPickaxe,
+    GoldPickaxe,
+    DiamondPickaxe,
 }
