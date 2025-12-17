@@ -29,6 +29,8 @@ public class NoiseVoxelMap : MonoBehaviour
     public float goldChance = 0.04f;   // 4%
     public float diamondChance = 0.01f;// 1%
 
+    public int currentStage = 1;        //1: 기본 2: 강한 돌 바닥 3: 다이아 바닥
+
     private void Start()
     {
         GenerateMap();
@@ -53,6 +55,12 @@ public class NoiseVoxelMap : MonoBehaviour
                 // 2. 바닥부터 높이 h까지 블록 쌓기
                 for (int y = 0; y <= h; y++)
                 {
+                    if (y == 0)
+                    {
+                        CreateStageFloor(x, y, z);
+                        continue; // 바닥을 깔았으면 다음 높이로 넘어감 (DetermineBlockToPlace 실행 X)
+                    }
+
                     DetermineBlockToPlace(x, y, z, h);
                 }
 
@@ -146,6 +154,29 @@ public class NoiseVoxelMap : MonoBehaviour
         if (targetPrefab != null)
         {
             PlaceBlock(pos.x, pos.y, pos.z, targetPrefab, type, true);
+        }
+    }
+
+    // 스테이지에 따라 바닥 블록을 생성하는 함수
+    void CreateStageFloor(int x, int y, int z)
+    {
+        switch (currentStage)
+        {
+            case 2: // 2스테이지: 바닥이 석탄
+                PlaceBlock(x, y, z, coalPrefab, ItemType.Coal, true);
+                // 주의: ItemType.Coal이 맞는지 확인하세요. (코드에선 HeavyStone을 쓰기도 했었음)
+                break;
+
+            case 3: // 3스테이지: 바닥이 다이아몬드
+                PlaceBlock(x, y, z, diamondPrefab, ItemType.Diamond, true);
+                break;
+
+            case 1: // 1스테이지: 일반 돌 (혹은 깰 수 없는 기반암)
+            default:
+                // 1스테이지는 바닥을 캐서 내려가야 하므로 mineable = true 로 설정하거나,
+                // 더 이상 못 내려가게 막으려면 mineable = false 로 설정
+                PlaceBlock(x, y, z, stonePrefab, ItemType.Stone, true);
+                break;
         }
     }
 }

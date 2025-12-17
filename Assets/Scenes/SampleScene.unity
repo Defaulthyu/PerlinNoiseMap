@@ -815,7 +815,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2140619375}
-  m_Father: {fileID: 1712441186}
+  m_Father: {fileID: 123621383}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1013,7 +1013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &123621383
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1030,6 +1030,7 @@ RectTransform:
   - {fileID: 1812666464}
   - {fileID: 196305359}
   - {fileID: 1254879496}
+  - {fileID: 100496391}
   m_Father: {fileID: 1712441186}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5874,9 +5875,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135755944}
-        m_TargetAssemblyTypeName: CraftingNPC, Assembly-CSharp
-        m_MethodName: CloseCrafting
+      - m_Target: {fileID: 1014932641}
+        m_TargetAssemblyTypeName: ShopUI, Assembly-CSharp
+        m_MethodName: CloseShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7232,10 +7233,11 @@ MonoBehaviour:
   waterLevel: 5
   maxHeight: 30
   noiseScale: 30
-  coalChance: 0.08
-  ironChance: 0.05
-  goldChance: 0.04
-  diamondChance: 0.01
+  coalChance: 0.2
+  ironChance: 0.1
+  goldChance: 0.05
+  diamondChance: 0.02
+  currentStage: 1
 --- !u!4 &1294357185
 Transform:
   m_ObjectHideFlags: 0
@@ -8757,7 +8759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1712441186
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8771,7 +8773,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 123621383}
-  - {fileID: 100496391}
   m_Father: {fileID: 1014932639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

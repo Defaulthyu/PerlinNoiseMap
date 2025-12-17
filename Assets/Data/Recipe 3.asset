@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Recipe 3
   m_EditorClassIdentifier: 
   displayName: "\uB2E4\uC774\uC544\uACE1\uAD2D\uC774"
-  Cost: 130
+  Cost: 100
   inputs:
   - type: 9
     count: 3
