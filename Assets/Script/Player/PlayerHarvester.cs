@@ -41,6 +41,12 @@ public class PlayerHarvester : MonoBehaviour
             currentItem = inventoryUI.GetInventorySlot();
         }
 
+        if (Input.GetMouseButtonDown(0)) // 좌클릭 (또는 우클릭)
+        {
+            // 상호작용 레이캐스트
+            InteractWithNPC();
+        }
+
         // 도구를 들었거나 맨손이면 채굴, 블록을 들었으면 건설
         if (IsTool(currentItem) || currentItem == ItemType.None)
         {
@@ -53,6 +59,31 @@ public class PlayerHarvester : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             TrashItem();
+        }
+    }
+
+    void InteractWithNPC()
+    {
+        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
+        {
+            // 1. 상점 NPC인지 확인
+            var shopNPC = hit.collider.GetComponent<ShopNPC>();
+            if (shopNPC != null)
+            {
+                // (기존 코드) shopUI.OpenShop(shopNPC);
+                // 주의: ShopNPC 스크립트 안에 OpenShop을 호출하는 Interact 함수가 있다면 그걸 부르세요.
+                return;
+            }
+
+            // 2. 제작 NPC인지 확인 (추가된 부분!)
+            var craftNPC = hit.collider.GetComponent<CraftingNPC>();
+            if (craftNPC != null)
+            {
+                Debug.Log("제작 NPC 클릭됨");
+                craftNPC.OpenCrafting(); // 제작대 열기
+                return;
+            }
         }
     }
 

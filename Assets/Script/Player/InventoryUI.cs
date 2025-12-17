@@ -129,7 +129,6 @@ public class InventoryUI : MonoBehaviour
             return ItemType.None;
         }
 
-        // 안전함이 확인되었을 때만 접근
         return items[selectedIndex].GetComponent<SlotItemPrefab>().itemType;
     }
 

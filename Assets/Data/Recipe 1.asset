@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d10122f738178041a9fa00fed3ec5d4, type: 3}
   m_Name: Recipe 1
   m_EditorClassIdentifier: 
-  displayName: 
+  displayName: "\uCCA0\uACE1\uAD2D\uC774"
+  Cost: 50
   inputs:
-  - type: 6
+  - type: 7
     count: 3
   - type: 4
     count: 1
   outputs:
-  - type: 10
+  - type: 11
     count: 1

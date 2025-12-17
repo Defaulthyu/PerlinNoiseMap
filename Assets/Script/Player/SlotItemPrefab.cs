@@ -13,6 +13,7 @@ public class SlotItemPrefab : MonoBehaviour, IPointerClickHandler
     public CraftingPanel craftingPanel;
 
     private GameObject player;
+    private ShopUI shopUI;
     public void ItemSetting(Sprite itemSprite, string txt, ItemType type)
     {
         itemImage.sprite = itemSprite;
@@ -24,6 +25,7 @@ public class SlotItemPrefab : MonoBehaviour, IPointerClickHandler
     {
         if (!craftingPanel)
             craftingPanel = FindObjectOfType<CraftingPanel>(true);
+        shopUI = FindObjectOfType<ShopUI>();
         player = GameObject.FindWithTag("Player");
 
 
@@ -31,9 +33,20 @@ public class SlotItemPrefab : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button != PointerEventData.InputButton.Right) return;
-        if (!craftingPanel) return;
+        // 우클릭(Right Button)인지 확인
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            // 1. 상점이 열려있다면? -> 판매 목록에 추가
+            if (shopUI != null && shopUI.IsShopOpen())
+            {
+                shopUI.AddToCart(itemType);
+                return; // 상점 처리를 했으면 제작 처리는 안 함
+            }
 
-        craftingPanel.AddPlanned(itemType, 1);
+            if (craftingPanel != null && craftingPanel.gameObject.activeSelf)
+            {
+                craftingPanel.AddPlanned(itemType, 1);
+            }
+        }
     }
 }

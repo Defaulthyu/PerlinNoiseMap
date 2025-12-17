@@ -24,6 +24,7 @@ public enum ItemType
     Grass,
     Water,
     Stone,
+    HeavyStone,
     Coal,
     Iron,
     Gold,

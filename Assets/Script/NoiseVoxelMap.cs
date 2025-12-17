@@ -104,7 +104,7 @@ public class NoiseVoxelMap : MonoBehaviour
         }
         else if (randomVal < coalChance) // 석탄은 돌이 있는 곳이면 어디든
         {
-            PlaceBlock(x, y, z, coalPrefab, ItemType.Coal, true);
+            PlaceBlock(x, y, z, coalPrefab, ItemType.HeavyStone, true);
         }
         else
         {

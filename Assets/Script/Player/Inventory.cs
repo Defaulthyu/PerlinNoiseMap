@@ -31,10 +31,10 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public int GetCount(ItemType id)
+    public int GetCount(ItemType type)
     {
-        items.TryGetValue(id, out var count);
-        return count;
+        if (items.ContainsKey(type)) return items[type];
+        return 0;
     }
 
     // void -> bool·Î º¯°æ

@@ -27,13 +27,6 @@ public class CraftingPanel : MonoBehaviour
         clearButton.onClick.AddListener(ClearPlanned);
         RefreshPlannedUI();
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SetOpen(!isOpen);
-        }
-    }
 
     public void SetOpen(bool open)
     {
@@ -68,13 +61,13 @@ public class CraftingPanel : MonoBehaviour
         planned[type] += count;
 
         RefreshPlannedUI();
-        SetHint($"{type} x {count} 추가 완료");
+        SetHint($"{type} x {count} 추가 완료", true);
     }
     public void ClearPlanned()
     {
         planned.Clear();
         RefreshPlannedUI();
-        SetHint("초기화 완료");
+        SetHint("초기화 완료", true);
     }
     void RefreshPlannedUI()
     {
@@ -92,16 +85,20 @@ public class CraftingPanel : MonoBehaviour
             sb.AppendLine($"{item.Key} x {item.Value}");
         plannedText.text = sb.ToString();
     }
-    void SetHint(string msg)
+    void SetHint(string msg, bool done)
     {
         if (hintText)
             hintText.text = msg;
+
+        hintText.text = msg;
+        hintText.color = done ? Color.green : Color.red;
+
     }
     void DoCraft()
     {
         if (planned.Count == 0)
         {
-            SetHint("재료가 부족합니다");
+            SetHint("재료가 부족합니다", false);
             return;
         }
 
@@ -109,16 +106,24 @@ public class CraftingPanel : MonoBehaviour
         {
             if (inventory.GetCount(plannedItem.Key) < plannedItem.Value)
             {
-                SetHint($"{plannedItem.Key}가 부족합니다");
+                SetHint($"{plannedItem.Key}가 부족합니다", false);
                 return;
             }
         }
         var matchedProduct = FindMatch(planned);
         if (matchedProduct == null)
         {
-            SetHint("알맞는 레시피가 없습니다");
+            SetHint("알맞는 레시피가 없습니다", false);
             return;
         }
+
+        if (inventory.gold < matchedProduct.Cost)
+        {
+            SetHint($"돈이 부족합니다. (비용: {matchedProduct.Cost}G)", false);
+            return;
+        }
+
+        inventory.UseGold(matchedProduct.Cost);
 
         //재료 소모
         foreach (var itemforConsume in planned)
@@ -130,7 +135,7 @@ public class CraftingPanel : MonoBehaviour
 
         ClearPlanned();
 
-        SetHint($"조합 완료: {matchedProduct.displayName}");
+        SetHint($"조합 완료: {matchedProduct.displayName}", true);
     }
 
     CraftingRecipe FindMatch(Dictionary<ItemType, int> planned)

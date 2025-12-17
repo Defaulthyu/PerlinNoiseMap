@@ -6,10 +6,13 @@ public class ShopNPC : MonoBehaviour
     // 아이템별 판매 가격 (플레이어가 팔 때 받는 돈)
     public Dictionary<ItemType, int> sellPrices = new Dictionary<ItemType, int>()
     {
-        { ItemType.Stone, 2 },
-        { ItemType.Coal, 10 },
-        { ItemType.Gold, 50 },
-        { ItemType.Diamond, 200 }
+        { ItemType.Grass, 3 },
+        { ItemType.Dirt, 5 },
+        { ItemType.Stone, 10 },
+        { ItemType.HeavyStone, 20 },
+        { ItemType.Iron, 40 },
+        { ItemType.Gold, 70 },
+        { ItemType.Diamond, 110 }
     };
 
     // 아이템별 구매 가격 (플레이어가 살 때 내는 돈)
@@ -33,7 +36,7 @@ public class ShopNPC : MonoBehaviour
     public void Interact(Inventory playerInv)
     {
         Debug.Log("상점 주인: 어서오게!");
-        shopUI.OpenShop(this, playerInv);
+        shopUI.OpenShop(this);
         Cursor.lockState = CursorLockMode.None;
     }
 }
