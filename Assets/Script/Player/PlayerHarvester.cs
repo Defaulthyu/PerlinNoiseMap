@@ -14,6 +14,16 @@ public class PlayerHarvester : MonoBehaviour
     public Inventory inventory;             //플레이어 인벤
     InventoryUI inventoryUI;
     public GameObject selectedBlock;
+    public float throwForce = 5f;
+
+    [System.Serializable]
+    public struct DropItemData
+    {
+        public ItemType type;
+        public GameObject prefab;
+    }
+    public List<DropItemData> dropItems = new List<DropItemData>();
+
     private void Awake()
     {
         _cam = Camera.main;
@@ -31,7 +41,7 @@ public class PlayerHarvester : MonoBehaviour
             currentItem = inventoryUI.GetInventorySlot();
         }
 
-        // ▼▼▼ 로직 분기: 도구를 들었거나 맨손이면 [채굴], 블록을 들었으면 [건설] ▼▼▼
+        // 도구를 들었거나 맨손이면 채굴, 블록을 들었으면 건설
         if (IsTool(currentItem) || currentItem == ItemType.None)
         {
             HandleMining(currentItem); // 채굴 모드
@@ -39,6 +49,24 @@ public class PlayerHarvester : MonoBehaviour
         else
         {
             HandleBuilding(currentItem); // 건설 모드
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            TrashItem();
+        }
+    }
+
+    void TrashItem()
+    {
+        if (inventoryUI.selectedIndex < 0) return;
+
+        ItemType currentItem = inventoryUI.GetInventorySlot();
+
+        if (currentItem == ItemType.None) return;
+
+        if (inventory.Consume(currentItem, 1))
+        {
+            Debug.Log($"아이템 삭제 완료: {currentItem}");
         }
     }
 

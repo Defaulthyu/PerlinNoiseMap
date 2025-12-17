@@ -84,42 +84,55 @@ public class InventoryUI : MonoBehaviour
 
     public void SetSelectedIndex(int idx)
     {
-        ResetSelection();
         if (selectedIndex == idx)
         {
             selectedIndex = -1;
         }
         else
         {
-            if (idx >= items.Count)
-            {
-                selectedIndex = -1;
-            }
-            else
-            {
-                SetSelection(idx);
-                selectedIndex = idx;
-            }
+            selectedIndex = idx;
         }
+
+        // 3. 화면 갱신 (색상 바꾸기)
+        UpdateSelectionVisuals();
     }
 
     public void ResetSelection()
     {
-        foreach (var slot in Slot)
-        {
-            slot.GetComponent<Image>().color = Color.white;
-        }
+        selectedIndex = -1;
+        UpdateSelectionVisuals();
     }
-
-    void SetSelection(int _idx)
+    public void UpdateSelectionVisuals()
     {
-        Slot[_idx].GetComponent<Image>().color = Color.yellow;
+        for (int i = 0; i < Slot.Count; i++)
+        {
+            Image slotBg = Slot[i].GetComponent<Image>();
+
+            if (slotBg != null)
+            {
+                if (i == selectedIndex)
+                {
+                    slotBg.color = Color.yellow;
+                }
+                else
+                {
+                    slotBg.color = Color.white;
+                }
+            }
+        }
     }
 
     public ItemType GetInventorySlot()
     {
+        if (selectedIndex < 0 || selectedIndex >= items.Count)
+        {
+            return ItemType.None;
+        }
+
+        // 안전함이 확인되었을 때만 접근
         return items[selectedIndex].GetComponent<SlotItemPrefab>().itemType;
     }
+
     public void UpdateGoldText(int gold)
     {
         // 텍스트 오브젝트가 연결되어 있다면 내용을 바꿈

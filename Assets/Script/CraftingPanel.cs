@@ -31,16 +31,7 @@ public class CraftingPanel : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            bool locked = isOpen;
             SetOpen(!isOpen);
-            if(locked)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
         }
     }
 
@@ -55,6 +46,19 @@ public class CraftingPanel : MonoBehaviour
 
         if (!open)
             ClearPlanned();
+
+        if (open)
+        {
+            // 인벤토리가 열리면: 커서 보이고, 잠금 해제
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            // 인벤토리가 닫히면: 커서 숨기고, 중앙 고정
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     public void AddPlanned(ItemType type, int count = 1)

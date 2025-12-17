@@ -37,12 +37,18 @@ public class Inventory : MonoBehaviour
         return count;
     }
 
-    public void Add(ItemType type, int count = 1)
+    // void -> bool·Î º¯°æ
+    public bool Add(ItemType type, int count = 1)
     {
+
         if (!items.ContainsKey(type)) items[type] = 0;
         items[type] += count;
+
         Debug.Log($"[Inventory] +{count} {type} (ÃÑ {items[type]})");
-        inventoryUI.UpdateInventoryUI(this);
+
+        if (inventoryUI != null) inventoryUI.UpdateInventoryUI(this);
+
+        return true;
     }
 
     public bool Consume(ItemType type, int count = 1)
