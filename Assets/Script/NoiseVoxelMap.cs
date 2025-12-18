@@ -163,8 +163,7 @@ public class NoiseVoxelMap : MonoBehaviour
         switch (currentStage)
         {
             case 2: // 2스테이지: 바닥이 석탄
-                PlaceBlock(x, y, z, coalPrefab, ItemType.Coal, true);
-                // 주의: ItemType.Coal이 맞는지 확인하세요. (코드에선 HeavyStone을 쓰기도 했었음)
+                PlaceBlock(x, y, z, coalPrefab, ItemType.HeavyStone, true);
                 break;
 
             case 3: // 3스테이지: 바닥이 다이아몬드
@@ -173,8 +172,6 @@ public class NoiseVoxelMap : MonoBehaviour
 
             case 1: // 1스테이지: 일반 돌 (혹은 깰 수 없는 기반암)
             default:
-                // 1스테이지는 바닥을 캐서 내려가야 하므로 mineable = true 로 설정하거나,
-                // 더 이상 못 내려가게 막으려면 mineable = false 로 설정
                 PlaceBlock(x, y, z, stonePrefab, ItemType.Stone, true);
                 break;
         }
