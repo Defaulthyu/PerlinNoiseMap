@@ -12,7 +12,11 @@ public class ShopNPC : MonoBehaviour
         { ItemType.HeavyStone, 20 },
         { ItemType.Iron, 40 },
         { ItemType.Gold, 70 },
-        { ItemType.Diamond, 110 }
+        { ItemType.Diamond, 110 },
+        { ItemType.StonePickaxe, 20 },
+        { ItemType.IronPickaxe, 50 },
+        { ItemType.GoldPickaxe, 80 },
+        { ItemType.DiamondPickaxe, 120 }
     };
 
     // 아이템별 구매 가격 (플레이어가 살 때 내는 돈)

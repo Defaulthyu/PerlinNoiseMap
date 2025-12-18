@@ -123,3 +123,4 @@ MonoBehaviour:
   hp: 0
   dropCount: 1
   mineable: 1
+  minTier: 1
